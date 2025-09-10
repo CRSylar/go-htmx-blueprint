@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply antialiased text-gray-900 bg-gray-50;
+  }
+}
+
+@layer utilities {
+  .htmx-request {
+    @apply opacity-50 transition-opacity;
+  }
+
+  .htmx-added {
+    @apply opacity-0;
+    animation: fadeIn 0.3s ease-in-out forwards;
+  }
+
+  .htmx-removed {
+    animation: fadeOut 0.3s ease-in-out forwards;
+  }
+
+  @keyframes fadeIn {
+    to {
+      @apply opacity-100;
+    }
+  }
+
+  @keyframes fadeOut {
+    to {
+      @apply opacity-0;
+    }
+  }
+}

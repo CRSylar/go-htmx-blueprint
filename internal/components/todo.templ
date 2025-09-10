@@ -1,0 +1,133 @@
+package components
+
+import (
+	"fmt"
+	"github.com/CRSylar/go-htmx-blueprint/internal/handlers"
+	"strconv"
+)
+
+templ TodoList(todos []handlers.Todo) {
+	if len(todos) == 0 {
+		<div class="text-center py-8 text-gray-500">
+			<svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+				></path>
+			</svg>
+			<h3 class="mt-2 text-sm font-medium text-gray-900">No todos yet</h3>
+			<p class="mt-1 text-sm text-gray-500">Get started by creating a new todo above.</p>
+		</div>
+	} else {
+		<div class="space-y-3">
+			for _, todo := range todos {
+				@TodoItem(todo)
+			}
+		</div>
+	}
+}
+
+templ TodoItem(todo handlers.Todo) {
+	<div
+		class={ "flex items-center justify-between p-4 bg-white rounded-lg border" , templ.KV("opacity-50", todo.Completed) }
+	>
+		<div class="flex items-center space-x-3 flex-1">
+			<input
+				type="checkbox"
+				class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+				if todo.Completed {
+					checked
+				}
+				hx-put={ fmt.Sprintf("/api/todos/%d", todo.ID) }
+				hx-vals={ fmt.Sprintf(`{"completed": "%s" }`, strconv.FormatBool(!todo.Completed)) }
+				hx-target="#todo-list"
+				hx-indicator="#loading-indicator"
+			/>
+			<div class="flex-1">
+				<p
+					class={ "text-sm" , templ.KV("line-through text-gray-500", todo.Completed), templ.KV("text-gray-900",
+        !todo.Completed) }
+				>
+					{ todo.Title }
+				</p>
+				<p class="text-xs text-gray-400">
+					Created { todo.CreatedAt.Format("Jan 2, 2006 at 3:04 PM") }
+				</p>
+			</div>
+		</div>
+		<div class="flex items-center space-x-2">
+			<button
+				class="text-gray-400 hover:text-primary-600 transition-colors"
+				hx-get={ fmt.Sprintf("/api/todos/%d/edit",
+      todo.ID) }
+				hx-target={ fmt.Sprintf("#todo-item-%d", todo.ID) }
+				hx-indicator="#loading-indicator"
+				title="Edit todo"
+			>
+				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+					></path>
+				</svg>
+			</button>
+			<button
+				class="text-gray-400 hover:text-red-600 transition-colors"
+				hx-delete={ fmt.Sprintf("/api/todos/%d", todo.ID) }
+				hx-target="#todo-list"
+				hx-confirm="Are you sure you want to delete this todo?"
+				hx-indicator="#loading-indicator"
+				title="Delete todo"
+			>
+				<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+					></path>
+				</svg>
+			</button>
+		</div>
+	</div>
+}
+
+templ EditTodoForm(todo handlers.Todo) {
+	<div class="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+		<form
+			class="flex-1 flex items-center space-x-3"
+			hx-put={ fmt.Sprintf("/api/todos/%d", todo.ID) }
+			hx-target="#todo-list"
+			hx-indicator="#loading-indicator"
+		>
+			<input
+				type="text"
+				name="title"
+				value={ todo.Title }
+				class="flex-1 px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+				required
+			/>
+			<div class="flex space-x-2">
+				<button
+					type="submit"
+					class="px-3 py-1 bg-primary-600 text-white text-sm rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
+				>
+					Save
+				</button>
+				<button
+					type="button"
+					class="px-3 py-1 bg-gray-300 text-gray-700 text-sm rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+					hx-get="/api/todos"
+					hx-target="#todo-list"
+					hx-indicator="#loading-indicator"
+				>
+					Cancel
+				</button>
+			</div>
+		</form>
+	</div>
+}
