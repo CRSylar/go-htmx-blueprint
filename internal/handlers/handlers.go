@@ -7,25 +7,21 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/CRSylar/go-htmx-blueprint/internal/components"
+	"github.com/CRSylar/go-htmx-blueprint/internal/entities"
+	"github.com/CRSylar/go-htmx-blueprint/templates"
 	"github.com/go-chi/chi/v5"
 )
 
 type Handlers struct {
 	logger *slog.Logger
-	todos  []Todo // in-memory store for blueprint demo pourpose
-}
-
-type Todo struct {
-	ID        int       `json:"id"`
-	Title     string    `json:"title"`
-	Completed bool      `json:"completed"`
-	CreatedAt time.Time `json:"created_at"`
+	todos  []entities.Todo // in-memory store for blueprint demo pourpose
 }
 
 func New(logger *slog.Logger) *Handlers {
 	return &Handlers{
 		logger: logger,
-		todos: []Todo{
+		todos: []entities.Todo{
 			{ID: 1, Title: "Learn HTMX", Completed: false, CreatedAt: time.Now()},
 			{ID: 2, Title: "Build with Templ", Completed: false, CreatedAt: time.Now()},
 			{ID: 3, Title: "Beautyfy with tailwindcss", Completed: false, CreatedAt: time.Now()},
@@ -68,7 +64,7 @@ func (h *Handlers) CreateTodo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newTodo := Todo{
+	newTodo := entities.Todo{
 		ID:        len(h.todos) + 1,
 		Title:     title,
 		Completed: false,
@@ -148,7 +144,7 @@ func (h *Handlers) EditTodoForm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var todo *Todo
+	var todo *entities.Todo
 	for _, t := range h.todos {
 		if t.ID == id {
 			todo = &t
@@ -162,7 +158,7 @@ func (h *Handlers) EditTodoForm(w http.ResponseWriter, r *http.Request) {
 	}
 
 	comp := components.EditTodoForm(*todo)
-	err := comp.Render(r.Context(), w)
+	err = comp.Render(r.Context(), w)
 	if err != nil {
 		h.logger.Error("Error rendering the edit form", "error", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)

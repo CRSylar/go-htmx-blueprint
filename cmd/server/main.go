@@ -9,6 +9,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/CRSylar/go-htmx-blueprint/internal/handlers"
+	"github.com/CRSylar/go-htmx-blueprint/internal/server"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	_ "github.com/joho/godotenv/autoload"
@@ -44,7 +46,7 @@ func main() {
 	// Http server
 	srv := &http.Server{
 		Addr:         ":" + os.Getenv("PORT"),
-		Handler:      h,
+		Handler:      r,
 		ReadTimeout:  15 * time.Second,
 		WriteTimeout: 15 * time.Second,
 		IdleTimeout:  60 * time.Second,

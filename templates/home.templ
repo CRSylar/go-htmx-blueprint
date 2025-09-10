@@ -2,14 +2,14 @@ package templates
 
 import (
 	"github.com/CRSylar/go-htmx-blueprint/internal/components"
-	"github.com/CRSylar/go-htmx-blueprint/internal/handlers"
+	"github.com/CRSylar/go-htmx-blueprint/internal/entities"
 )
 
-templ HomePage(todos []handlers.Todo) {
+templ HomePage(todos []entities.Todo) {
 	@BasePage("HTMX + Templ Todo App", HomeContent(todos))
 }
 
-templ HomeContent(todos []handlers.Todo) {
+templ HomeContent(todos []entities.Todo) {
 	<div class="space-y-8">
 		<!-- Header -->
 		<div class="text-center">

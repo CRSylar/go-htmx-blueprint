@@ -2,11 +2,11 @@ package components
 
 import (
 	"fmt"
-	"github.com/CRSylar/go-htmx-blueprint/internal/handlers"
+	"github.com/CRSylar/go-htmx-blueprint/internal/entities"
 	"strconv"
 )
 
-templ TodoList(todos []handlers.Todo) {
+templ TodoList(todos []entities.Todo) {
 	if len(todos) == 0 {
 		<div class="text-center py-8 text-gray-500">
 			<svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -29,7 +29,7 @@ templ TodoList(todos []handlers.Todo) {
 	}
 }
 
-templ TodoItem(todo handlers.Todo) {
+templ TodoItem(todo entities.Todo) {
 	<div
 		class={ "flex items-center justify-between p-4 bg-white rounded-lg border" , templ.KV("opacity-50", todo.Completed) }
 	>
@@ -96,7 +96,7 @@ templ TodoItem(todo handlers.Todo) {
 	</div>
 }
 
-templ EditTodoForm(todo handlers.Todo) {
+templ EditTodoForm(todo entities.Todo) {
 	<div class="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border border-yellow-200">
 		<form
 			class="flex-1 flex items-center space-x-3"

@@ -1,46 +1,43 @@
 package templates
 
-import (
-"github.com/CRSylar/go-htmx-blueprint/internal/handlers"
-)
+import ()
 
 templ BasePage(title string, content templ.Component) {
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-with, initial-scale=1.0" />
-  <title>{title}</title>
-  <link href="/static/css/output.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
-</head>
-
-<body class="min-h-screen bg-gray-50">
-  <nav class="bg-white shadow-sm border-b border-gray-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex items-center">
-          <h1 class="text-xl font-semibold text-gray-900">
-            HTMX + TEMPL app
-          </h1>
-        </div>
-        <div class="flex items-center space-x-4">
-          <a href="/" class="text-gray-600 hover:text-gray-900">Home</a>
-          <a href="/health" class="text-gray-600 hover:text-gray-900">Health</a>
-        </div>
-      </div>
-    </div>
-  </nav>
-  <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-    @content
-  </main>
-  <!-- HTMX indicators -->
-  <div id="loading-indicator"
-    class="htmx-indicator fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg">
-    Loading...
-  </div>
-</body>
-
-</html>
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-with, initial-scale=1.0"/>
+			<title>{ title }</title>
+			<link href="/static/css/output.css" rel="stylesheet"/>
+			<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
+		</head>
+		<body class="min-h-screen bg-gray-50">
+			<nav class="bg-white shadow-sm border-b border-gray-200">
+				<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+					<div class="flex justify-between h-16">
+						<div class="flex items-center">
+							<h1 class="text-xl font-semibold text-gray-900">
+								HTMX + TEMPL app
+							</h1>
+						</div>
+						<div class="flex items-center space-x-4">
+							<a href="/" class="text-gray-600 hover:text-gray-900">Home</a>
+							<a href="/health" class="text-gray-600 hover:text-gray-900">Health</a>
+						</div>
+					</div>
+				</div>
+			</nav>
+			<main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+				@content
+			</main>
+			<!-- HTMX indicators -->
+			<div
+				id="loading-indicator"
+				class="htmx-indicator fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg"
+			>
+				Loading...
+			</div>
+		</body>
+	</html>
 }

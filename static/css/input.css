@@ -1,24 +1,21 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
   html {
     scroll-behavior: smooth;
   }
-
-  body {
-    @apply antialiased text-gray-900 bg-gray-50;
-  }
 }
 
 @layer utilities {
   .htmx-request {
-    @apply opacity-50 transition-opacity;
+    opacity: 0.5;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-property: opacity;
   }
 
   .htmx-added {
-    @apply opacity-0;
+    opacity: 0;
     animation: fadeIn 0.3s ease-in-out forwards;
   }
 
@@ -28,13 +25,13 @@
 
   @keyframes fadeIn {
     to {
-      @apply opacity-100;
+      opacity: 100%;
     }
   }
 
   @keyframes fadeOut {
     to {
-      @apply opacity-0;
+      opacity: 0;
     }
   }
 }
