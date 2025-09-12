@@ -31,6 +31,7 @@ templ TodoList(todos []entities.Todo) {
 
 templ TodoItem(todo entities.Todo) {
 	<div
+		id={ fmt.Sprintf("todo-item-%d", todo.ID) }
 		class={ "flex items-center justify-between p-4 bg-white rounded-lg border" , templ.KV("opacity-50", todo.Completed) }
 	>
 		<div class="flex items-center space-x-3 flex-1">

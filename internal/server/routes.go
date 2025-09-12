@@ -21,7 +21,9 @@ func SetupRoutes(r *chi.Mux, h *handlers.Handlers) {
 		route.Delete("/todos/{id}", h.DeleteTodo)
 
 		// partial render example for htmx
-		r.Get("/todos/{id}/edit", h.EditTodoForm)
+		route.Get("/todos/{id}/edit", h.EditTodoForm)
+		route.Get("/todos/{id}/cancel", h.CancelEditTodo)
+		route.Get("/todos/{id}", h.GetTodoItem)
 	})
 
 }

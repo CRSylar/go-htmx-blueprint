@@ -165,3 +165,51 @@ func (h *Handlers) EditTodoForm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func (h *Handlers) GetTodoItem(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	for _, todo := range h.todos {
+		if todo.ID == id {
+			component := components.TodoItem(todo)
+			err = component.Render(r.Context(), w)
+			if err != nil {
+				h.logger.Error("Error rendering todo item", "error", err)
+				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+				return
+			}
+			return
+		}
+	}
+
+	w.WriteHeader(http.StatusNotFound)
+}
+
+func (h *Handlers) CancelEditTodo(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	for _, todo := range h.todos {
+		if todo.ID == id {
+			component := components.TodoItem(todo)
+			err = component.Render(r.Context(), w)
+			if err != nil {
+				h.logger.Error("Error rendering todo item", "error", err)
+				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+				return
+			}
+			return
+		}
+	}
+
+	w.WriteHeader(http.StatusNotFound)
+}
