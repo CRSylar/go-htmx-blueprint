@@ -47,7 +47,10 @@ func (h *Handlers) Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handlers) GetTodos(w http.ResponseWriter, r *http.Request) {
-	component := components.TodoList(h.todos)
+
+	search := r.URL.Query().Get("q")
+
+	component := components.TodoList(h.todos, search)
 	err := component.Render(r.Context(), w)
 	if err != nil {
 		h.logger.Error("Error rendering the todos", "error", err)
@@ -73,7 +76,7 @@ func (h *Handlers) CreateTodo(w http.ResponseWriter, r *http.Request) {
 
 	h.todos = append(h.todos, newTodo)
 
-	comp := components.TodoList(h.todos)
+	comp := components.TodoList(h.todos, "")
 	err := comp.Render(r.Context(), w)
 	if err != nil {
 		h.logger.Error("Error rendering the todos after the creation", "error", err)
@@ -102,7 +105,7 @@ func (h *Handlers) UpdateTodo(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	comp := components.TodoList(h.todos)
+	comp := components.TodoList(h.todos, "")
 	err = comp.Render(r.Context(), w)
 	if err != nil {
 		h.logger.Error("Error rendering the todos after update", "error", err)
@@ -126,7 +129,7 @@ func (h *Handlers) DeleteTodo(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	comp := components.TodoList(h.todos)
+	comp := components.TodoList(h.todos, "")
 	err = comp.Render(r.Context(), w)
 	if err != nil {
 		h.logger.Error("Error rendering the todos after deletion", "error", err)

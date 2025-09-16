@@ -35,7 +35,7 @@ func main() {
 	r.Use(middleware.Timeout(30 * time.Second))
 
 	// serve Static file from ./static
-	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	r.Handle("/static/*", disableCacheInDevMode(http.StripPrefix("/static/", http.FileServer(http.Dir("static")))))
 
 	// initialize handlers
 	h := handlers.New(logger)
@@ -77,4 +77,18 @@ func main() {
 	}
 
 	slog.Info("Server exited")
+}
+
+func disableCacheInDevMode(next http.Handler) http.Handler {
+	// ENV is autoloaded from the .env file
+	if !(os.Getenv("ENV") == "dev" || os.Getenv("ENV") == "development") {
+		return next
+	}
+
+	slog.Info("Disabling cache headers for static assets in DEV server...")
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "no-store")
+		next.ServeHTTP(w, r)
+	})
 }

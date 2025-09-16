@@ -37,19 +37,31 @@ templ HomeContent(todos []entities.Todo) {
 			</form>
 		</div>
 		<!-- TODO list -->
-		<div class="card">
+		<div class="">
 			<div class="flex justify-between items-center mb-6">
 				<h3 class="text-lg font-medium text-gray-900">Your Todos</h3>
-				<button class="btn-secondary" hx-get="/api/todos" hx-target="#todo-list" hx-indicator="#loading-indicator">
+				<p>
+					<label for="filter">Filter</label>
+					<input
+						type="search"
+						class="pl-2"
+						name="q"
+						placeholder="Begin Typing to filter todos..."
+						hx-get="/api/todos"
+						hx-trigger="change, keyup delay:200ms changed"
+						hx-target="#todo-list"
+					/>
+				</p>
+				<button class="" hx-get="/api/todos" hx-target="#todo-list" hx-indicator="#loading-indicator">
 					Refresh
 				</button>
 			</div>
 			<div id="todo-list">
-				@components.TodoList(todos)
+				@components.TodoList(todos, "")
 			</div>
 		</div>
 		<!-- Demo Actions -->
-		<div class="p-2 bg-blue-50 border-blue-200">
+		<div class="p-2 bg-blue-50 rounded-xl">
 			<h3 class="text-lg font-medium text-blue-900 mb-4">HTMX Demo Features</h3>
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-800">
 				<div>

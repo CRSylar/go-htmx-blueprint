@@ -8,7 +8,7 @@ help: ## Show this help message
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 # Installation targets
-install: deps air-install tailwind-install ## Install all dependencies
+install: deps tailwind-install ## Install all dependencies
 	@echo "✅ All dependencies installed successfully!"
 
 deps: ## Install Go dependencies
@@ -16,14 +16,6 @@ deps: ## Install Go dependencies
 	go mod tidy
 	go mod download
 
-air-install: ## Install Air for hot reloading
-	@echo "🌪️  Installing Air..."
-	@if ! command -v air > /dev/null 2>&1; then \
-		go install github.com/cosmtrek/air@latest; \
-		echo "✅ Air installed"; \
-	else \
-		echo "✅ Air already installed"; \
-	fi
 
 tailwind-install: ## Install Tailwind CSS CLI
 	@echo "🎨 Installing Tailwind CSS CLI..."
@@ -46,19 +38,15 @@ tailwind-install: ## Install Tailwind CSS CLI
 # Development targets
 dev: ## Start development server with hot reloading
 	@echo "🚀 Starting development server..."
-	@make -j3 watch-css templ-watch air-dev
-
-air-dev: ## Start Air for Go hot reloading
-	@echo "🌪️  Starting Air..."
-	air
+	@make -j2 watch-css templ-watch
 
 templ-watch: ## Watch and generate templ files
 	@echo "👀 Watching templ files..."
-	templ generate --watch
+	templ generate --watch --proxy="http://localhost:3000" --cmd="go run ./cmd/server/" --open-browser=false -v
 
 watch-css: ## Watch and build CSS
 	@echo "🎨 Watching CSS files..."
-	tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch
+	tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch -v
 
 # Build targets
 build: templ css ## Build the application
@@ -82,7 +70,6 @@ build-prod: templ css ## Build for production
 clean: ## Clean build artifacts
 	@echo "🧹 Cleaning up..."
 	rm -rf bin/
-	rm -rf tmp/
 	rm -f static/css/output.css
 
 test: ## Run tests

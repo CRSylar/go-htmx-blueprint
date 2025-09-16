@@ -3,10 +3,11 @@ package components
 import (
 	"fmt"
 	"github.com/CRSylar/go-htmx-blueprint/internal/entities"
+	"github.com/lithammer/fuzzysearch/fuzzy"
 	"strconv"
 )
 
-templ TodoList(todos []entities.Todo) {
+templ TodoList(todos []entities.Todo, filter string) {
 	if len(todos) == 0 {
 		<div class="text-center py-8 text-gray-500">
 			<svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -23,7 +24,9 @@ templ TodoList(todos []entities.Todo) {
 	} else {
 		<div class="space-y-3">
 			for _, todo := range todos {
-				@TodoItem(todo)
+				if fuzzy.MatchFold(filter, todo.Title) {
+					@TodoItem(todo)
+				}
 			}
 		</div>
 	}
